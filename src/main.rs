@@ -14,7 +14,7 @@ fn main() {
 
     writeln!(file, "{}", cpu_info).expect("Failed to write to file");
     writeln!(file, "{}", gpu_info).expect("Failed to write to file");
-    writeln!(file, "Display: {}", display_info).expect("Failed to write to file");
+    writeln!(file, "{}", display_info).expect("Failed to write to file");
     writeln!(file, "{}", ram_info).expect("Failed to write to file");
 
     println!("System information has been written to system_info.txt");

@@ -37,14 +37,20 @@ pub fn get_gpu_info() -> String {
 // Function to get display information
 pub fn get_display_info() -> String {
     let display_info = Command::new("wmic")
-        .args(&["path", "Win32_VideoController", "get", "CurrentHorizontalResolution,CurrentVerticalResolution", "/format:value"])
+        .args(&[
+            "path",
+            "Win32_VideoController",
+            "get",
+            "CurrentHorizontalResolution,CurrentVerticalResolution",
+            "/format:value",
+        ])
         .output()
         .expect("Failed to execute command")
         .stdout;
 
     let display_str = String::from_utf8_lossy(&display_info);
 
-    display_str
+    let display_values: Vec<&str> = display_str
         .lines()
         .filter_map(|line| {
             if line.contains('=') {
@@ -58,15 +64,9 @@ pub fn get_display_info() -> String {
                 None
             }
         })
-        .collect::<Vec<&str>>()
-        .join("x");
+        .collect();
 
-        String::from_utf8_lossy(&display_info)
-            .lines()
-            .skip(1)
-            .next()
-            .map(|line| format!("Display: {}", line.trim()))
-            .unwrap_or_else(|| "Display: Unknown".to_string())
+    format!("Display: {}", display_values.join("x"))
 }
 
 // Function to get RAM information

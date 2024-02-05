@@ -17,7 +17,6 @@ mod tests {
     #[test]
     fn test_get_display_info() {
         let result = get_display_info();
-        println!("{}", result);
         assert!(result.starts_with("Display:"));
     }
 
