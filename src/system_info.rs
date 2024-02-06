@@ -4,13 +4,13 @@ use std::process::Command;
 // Function to get CPU information
 pub fn get_cpu_info() -> String {
     let cpu_info = Command::new("wmic")
-        .args(&["cpu", "get", "name"])
+        .args(["cpu", "get", "name"])
         .output()
         .expect("Failed to execute command")
         .stdout;
 
     let cpu_str = String::from_utf8_lossy(&cpu_info);
-    let cpu_details = cpu_str.lines().skip(1).next();
+    let cpu_details = cpu_str.lines().nth(1);
 
     match cpu_details {
         Some(details) => format!("CPU: {}", details.trim()),
@@ -21,15 +21,13 @@ pub fn get_cpu_info() -> String {
 // Function to get GPU information
 pub fn get_gpu_info() -> String {
     let gpu_info = Command::new("wmic")
-        .args(&["path", "win32_videocontroller", "get", "caption"])
+        .args(["path", "win32_videocontroller", "get", "caption"])
         .output()
         .expect("Failed to execute command")
         .stdout;
 
     String::from_utf8_lossy(&gpu_info)
-        .lines()
-        .skip(1)
-        .next()
+        .lines().nth(1)
         .map(|line| format!("GPU: {}", line.trim()))
         .unwrap_or_else(|| "GPU: Unknown".to_string())
 }
@@ -37,7 +35,7 @@ pub fn get_gpu_info() -> String {
 // Function to get display information
 pub fn get_display_info() -> String {
     let display_info = Command::new("wmic")
-        .args(&[
+        .args([
             "path",
             "Win32_VideoController",
             "get",
@@ -72,7 +70,7 @@ pub fn get_display_info() -> String {
 // Function to get RAM information
 pub fn get_ram_info() -> String {
     let ram_info = Command::new("wmic")
-        .args(&["memorychip", "get", "capacity"])
+        .args(["memorychip", "get", "capacity"])
         .output()
         .expect("Failed to execute command")
         .stdout;
